@@ -1,0 +1,16 @@
+# git curl openssh-server ansible openjdk-11 maven chromium-browser
+sudo apt install --yes git curl openssh-server ansible openjdk-11-jdk openjdk-11-doc maven chromium-browser
+
+# nvm + node latest lts
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+source .bashrc
+nvm install --lts
+
+# VS code
+sudo snap install --classic code 
+
+# eclipse 
+sudo snap install --classic eclipse
+
+# intellij idea community
+sudo snap install --classic intellij-idea-community
