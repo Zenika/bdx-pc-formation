@@ -1,3 +1,8 @@
+# PPA pour dernière version d'Ansible
+sudo apt update
+sudo apt install software-properties-common
+sudo apt-add-repository --yes --update ppa:ansible/ansible
+
 # git curl openssh-server ansible openjdk-11 maven chromium-browser
 sudo apt install --yes git curl openssh-server ansible openjdk-11-jdk openjdk-11-doc maven chromium-browser
 

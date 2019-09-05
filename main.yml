@@ -1,7 +1,6 @@
 ---
-- hosts: pc-formation
+- hosts: localhost
   remote_user: zenika
-  become: yes
   tasks:
     - name: install list of packages
       apt:
@@ -16,3 +15,32 @@
         - openjdk-11-doc
         - maven
         - chromium-browser
+      become: yes
+    - name: install nvm
+      shell: >
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+      args:
+        creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+    - name: install latest Node LTS
+      shell: "source {{ ansible_env.HOME }}/.nvm/nvm.sh && nvm install --lts"
+      args:
+        executable: /bin/bash
+        creates: "{{ ansible_env.HOME }}/.nvm/alias/default"
+    - name: install VS Code
+      snap:
+        name:
+          - code
+        classic: yes
+      become: yes
+    - name: install Intellij IDEA Community
+      snap:
+        name:
+          - intellij-idea-community
+        classic: yes
+      become: yes
+    - name: install Eclipse
+      snap:
+        name:
+          - eclipse
+        classic: yes
+      become: yes
