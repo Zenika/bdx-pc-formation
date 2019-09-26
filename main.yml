@@ -11,12 +11,16 @@
         - git
         - curl
         - openssh-server
+        - openjdk-8-jdk
+        - openjdk-8-doc
         - openjdk-11-jdk
         - openjdk-11-doc
         - maven
         - chromium-browser
       become: yes
-
+    - name: set jdk 8 by default
+      shell: update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+      become: yes
     - name: install nvm
       shell: >
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
