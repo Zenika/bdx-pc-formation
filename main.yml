@@ -18,14 +18,25 @@
         - maven
         - chromium-browser
       become: yes
-    - name: set jdk 8 by default
-      shell: update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
-      become: yes
-    - name: install nvm
-      shell: >
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-      args:
-        creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+    - name: set jdk 8 as default
+      alternatives:
+        name: java
+        path: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+
+    - name: get stats on nvm
+      stat: path="{{ ansible_env.HOME }}/.nvm"
+      register: nvm_stat
+
+    - name: download nvm script
+      get_url:
+        dest: "{{ nvm_working_path }}"
+        url: https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh
+      when: not nvm_stat.stat.exists
+
+    - name: run nvm script
+      command: "bash {{ nvm_working_path }}/install.sh"
+      become: true
+      when: not nvm_stat.stat.exists
 
     - name: install latest Node LTS
       shell: "source {{ ansible_env.HOME }}/.nvm/nvm.sh && nvm install --lts"
@@ -35,7 +46,7 @@
 
     - name: Installation des package pré-requis à Docker
       become: yes
-      apt: name={{item}} update_cache=yes state=present
+      apt: name={{ item }} update_cache=yes state=present
       with_items:
         - apt-transport-https
         - ca-certificates
@@ -50,7 +61,7 @@
     - name: Ajout du repo apt Docker
       become: yes
       apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
 
     - name: Installation de Docker
       become: yes
@@ -62,13 +73,13 @@
 
     - name: Suppression de docker-py
       become: yes
-      pip: 
+      pip:
         name: docker-py
         state: absent
 
     - name: Installation du module pip docker-compose
       become: yes
-      pip: 
+      pip:
         name: docker-compose
 
     - name: install VS Code
