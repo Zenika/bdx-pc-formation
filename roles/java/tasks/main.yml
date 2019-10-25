@@ -1,0 +1,17 @@
+- name: install java jdk8, jdk11 and Maven
+  apt:
+    name: "{{ packages_to_install }}"
+    update_cache: yes
+  vars:
+    packages_to_install:
+    - openjdk-8-jdk
+    - openjdk-8-doc
+    - openjdk-11-jdk
+    - openjdk-11-doc
+    - maven
+  become: yes
+- name: set jdk 8 as default
+  alternatives:
+    name: java
+    path: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+  become: yes

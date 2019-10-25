@@ -1,0 +1,11 @@
+- name: install commons packages
+  apt:
+    name: "{{ packages_to_install }}"
+    update_cache: yes
+  vars:
+    packages_to_install:
+    - git
+    - curl
+    - openssh-server
+    - chromium-browser
+  become: yes
