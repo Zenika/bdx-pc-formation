@@ -1,0 +1,37 @@
+- name: Installation des package pré-requis à Docker
+  become: yes
+  apt: name={{ item }} update_cache=yes state=present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+
+- name: Ajout de la clé GPG officielle de Docker
+  become: yes
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+
+- name: Ajout du repo apt Docker
+  become: yes
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+
+- name: Installation de Docker
+  become: yes
+  apt: name=docker-ce update_cache=yes
+
+- name: Installation de pip
+  become: yes
+  apt: name=python-pip
+
+- name: Suppression de docker-py
+  become: yes
+  pip:
+    name: docker-py
+    state: absent
+
+- name: Installation du module pip docker-compose
+  become: yes
+  pip:
+    name: docker-compose

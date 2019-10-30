@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  remote_user: zenika
+  roles:
+    - apt
+    - java
+    - docker
+    - javascript
+    - ide
